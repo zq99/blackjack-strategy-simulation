@@ -16,7 +16,6 @@ def get_dealer_result(dealer, player, deck):
 
 
 def play(total_rounds, deck_count, strategy_type):
-
     score = Score()
     strategy = Strategy(strategy_type)
 
