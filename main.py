@@ -10,7 +10,7 @@ def simulation():
     players = []
 
     players.append(Player(StrategyType.Random))
-    players.append(Player(StrategyType.BasicStrategy))
+    players.append(Player(StrategyType.Random))
     players.append(Player(StrategyType.BasicStrategy))
     players.append(Player(StrategyType.BasicStrategy))
 
