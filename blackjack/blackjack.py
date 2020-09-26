@@ -46,7 +46,7 @@ class Blackjack:
                 player.add_card(card)
                 if player.is_blackjack():
                     break
-        return player
+        return player, deck
 
     def play(self, strategy_type):
         # this method simulates each game of blackjack for however many times specified by 'total_rounds'
@@ -68,7 +68,7 @@ class Blackjack:
             dealer.add_card(deck.remove_random_card())
             dealer.add_face_down(deck.remove_random_card())
 
-            player = self.__deal_to_player(player, dealer, deck, strategy)
+            player, deck = self.__deal_to_player(player, dealer, deck, strategy)
 
             if player.is_busted():
                 score.add_to_dealer()
