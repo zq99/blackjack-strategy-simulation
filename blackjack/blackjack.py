@@ -108,10 +108,10 @@ class Blackjack:
                     if player_hand.is_busted():
                         player.get_score().add_to_losses()
                     else:
-                        result = self.__compare_dealer_and_player_hands(dealer.get_hand(), player_hand)
-                        if result == ResultType.DealerWin:
+                        comparison = self.__compare_dealer_and_player_hands(dealer.get_hand(), player_hand)
+                        if comparison == ResultType.DealerWin:
                             player.get_score().add_to_losses()
-                        elif result == ResultType.PlayerWin:
+                        elif comparison == ResultType.PlayerWin:
                             player.get_score().add_to_wins()
                         else:
                             player.get_score().add_to_push()
