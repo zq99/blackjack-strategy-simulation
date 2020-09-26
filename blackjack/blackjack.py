@@ -7,8 +7,10 @@ from model.deck import create_game_deck
 
 
 def get_dealer_result(dealer, player, deck):
+    # dealer issues cards to him/herself until
+    # busted or player wins or dealer gets blackjack
     while not dealer.is_busted():
-        card = deck.remove_random_card()
+        card = dealer.get_face_down() if dealer.is_cards_hidden() else deck.remove_random_card()
         dealer.add_card(card)
         if dealer.is_blackjack() or dealer.get_max_total() > player.get_max_total():
             return True
@@ -16,6 +18,7 @@ def get_dealer_result(dealer, player, deck):
 
 
 def play(total_rounds, deck_count, strategy_type):
+    # this method simulates each game of blackjack for however many times specified by 'total_rounds'
     score = Score()
     strategy = Strategy(strategy_type)
 
@@ -26,9 +29,13 @@ def play(total_rounds, deck_count, strategy_type):
         dealer = Hand()
         player = Hand()
 
+        # deal cards to player
         for _ in full_range(1, 2):
             player.add_card(deck.remove_random_card())
+
+        # deal cards to dealer
         dealer.add_card(deck.remove_random_card())
+        dealer.add_face_down(deck.remove_random_card())
 
         if player.is_blackjack():
             score.add_to_player()

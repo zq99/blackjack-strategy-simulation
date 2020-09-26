@@ -4,6 +4,7 @@ from model.card import CardType
 class Hand:
     def __init__(self):
         self.cards = []
+        self.hidden = []
         self.is_ace_in_hand = False
 
     def add_card(self, card):
@@ -33,6 +34,15 @@ class Hand:
             return False
         else:
             return True
+
+    def add_face_down(self,card):
+        self.hidden.append(card)
+
+    def is_cards_hidden(self):
+        return len(self.hidden) > 0
+
+    def get_face_down(self):
+        return self.hidden.pop(0)
 
     def is_soft(self):
         return self.is_ace_in_hand
