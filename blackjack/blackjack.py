@@ -5,7 +5,7 @@ from blackjack.hand import Hand
 from blackjack.score import Score
 from blackjack.strategy import Strategy
 from common.util import full_range
-from model.deck import create_game_deck
+from model.deck import create_deck
 
 
 class ResultType(enum.Enum):
@@ -67,7 +67,7 @@ class Blackjack:
         counter = 0
         while counter < self.total_rounds:
             counter += 1
-            deck = create_game_deck(self.deck_count)
+            deck = create_deck(self.deck_count)
             dealer = Hand()
             player = Hand()
 

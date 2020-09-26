@@ -3,7 +3,7 @@ from common.util import full_range
 from model.card import Suit, create_ace_card, create_royal_card, create_number_card
 
 
-def create_game_deck(number_of_decks=1):
+def create_deck(number_of_decks=1):
     # this is main method for creation
     game_deck = GameDeck()
     for _ in full_range(1, number_of_decks):
