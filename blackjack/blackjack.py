@@ -51,7 +51,7 @@ class Blackjack:
     @staticmethod
     def __deal_initial_cards(player, dealer, deck):
         # deal cards to player
-        for n in full_range(1, 2):
+        for _ in full_range(1, 2):
             player.add_card(deck.remove_random_card())
 
         # deal cards to dealer
