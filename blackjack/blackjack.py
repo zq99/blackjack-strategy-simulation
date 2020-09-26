@@ -41,7 +41,7 @@ class Blackjack:
 
     @staticmethod
     def __deal_more_cards_to_players(players, dealer, deck):
-        max_total = 0
+        highest_total = 0
         for player in players:
             strategy = Strategy(player.strategy_type)
             for player_hand in player.get_hands():
@@ -54,8 +54,8 @@ class Blackjack:
                         player_hand.add_card(card)
                         if player_hand.is_blackjack():
                             break
-                max_total = max(max_total, player_hand.get_max_total())
-        return players, deck, max_total
+                highest_total = max(highest_total, player_hand.get_max_total())
+        return players, deck, highest_total
 
     @staticmethod
     def __deal_initial_cards(players, dealer, deck):
