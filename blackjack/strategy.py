@@ -8,6 +8,9 @@ class StrategyType(enum.Enum):
     BasicStrategy = 1
     Random = 2
 
+    def __str__(self):
+        return str(self.value)
+
 
 class Strategy:
 
@@ -24,6 +27,7 @@ class Strategy:
     def __random_choice():
         return rand.choice(list(ActionType))
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def __basic_strategy(player, dealer):
         if player.is_hard():

@@ -1,10 +1,9 @@
 import enum
 
 from blackjack.common import ActionType
+from blackjack.dealer import Dealer
 from blackjack.hand import Hand
-from blackjack.score import Score
 from blackjack.strategy import Strategy
-from common.util import full_range
 from model.deck import create_deck
 
 
@@ -20,69 +19,101 @@ class Blackjack:
         self.deck_count = decks
 
     @staticmethod
-    def __get_result_against_dealer(dealer, player, deck):
-        # dealer issues cards to him/herself until
-        # busted or player wins or dealer gets blackjack
-        while not dealer.is_busted():
-            card = dealer.get_face_down() if dealer.is_cards_hidden() else deck.remove_random_card()
-            dealer.add_card(card)
-            if dealer.is_blackjack():
-                if player.is_blackjack():
-                    return ResultType.Push
-                else:
-                    return ResultType.DealerWin
-            elif dealer.get_max_total() > player.get_max_total():
+    def __get_result_against_dealer(dealer_hand, player_hand):
+        if dealer_hand.is_blackjack():
+            if player_hand.is_blackjack():
+                return ResultType.Push
+            else:
                 return ResultType.DealerWin
+        elif dealer_hand.get_max_total() > player_hand.get_max_total():
+            return ResultType.DealerWin
         return ResultType.PlayerWin
 
     @staticmethod
-    def __deal_more_cards_to_player(player, dealer, deck, strategy):
-        while not player.is_busted():
-            action = strategy.evaluate(player, dealer)
-            if action == ActionType.Stand:
+    def __deal_more_cards_to_dealer(dealer, deck, highest_player_total):
+        while not dealer.get_hand().is_busted():
+            dealer_hand = dealer.get_hand()
+            card = dealer_hand.get_face_down() if dealer_hand.is_cards_hidden() else deck.remove_random_card()
+            dealer_hand.add_card(card)
+            if dealer_hand.is_blackjack():
                 break
-            elif action == ActionType.Hit or ActionType.Double:
-                card = deck.remove_random_card()
-                player.add_card(card)
-                if player.is_blackjack():
-                    break
-        return player, deck
+            elif dealer_hand.get_max_total() > highest_player_total:
+                break
+        return dealer
 
     @staticmethod
-    def __deal_initial_cards(player, dealer, deck):
-        # deal cards to player
-        for _ in full_range(1, 2):
-            player.add_card(deck.remove_random_card())
+    def __deal_more_cards_to_players(players, dealer, deck):
+        max_total = 0
+        for player in players:
+            strategy = Strategy(player.strategy_type)
+            for player_hand in player.get_hands():
+                while not player_hand.is_busted():
+                    action = strategy.evaluate(player_hand, dealer.get_hand())
+                    if action == ActionType.Stand:
+                        break
+                    elif action == ActionType.Hit or ActionType.Double:
+                        card = deck.remove_random_card()
+                        player_hand.add_card(card)
+                        if player_hand.is_blackjack():
+                            break
+                max_total = max(max_total, player_hand.get_max_total())
+        return players, deck, max_total
 
-        # deal cards to dealer
-        dealer.add_card(deck.remove_random_card())
-        dealer.add_face_down(deck.remove_random_card())
-        return player, dealer, deck
+    @staticmethod
+    def __deal_initial_cards(players, dealer, deck):
+        # dealing card order methodology:
+        # https://healy.econ.ohio-state.edu/blackjack/table/dealing.html
 
-    def play(self, strategy_type):
-        # this method simulates each game of blackjack for however many times specified by 'total_rounds'
-        score = Score()
-        strategy = Strategy(strategy_type)
+        # deal 1st card to players
+        for player in players:
+            player.add_card_to_first_hand(deck.remove_random_card())
+
+        # deal 1st down card to dealer
+        dealer.get_hand().add_face_down(deck.remove_random_card())
+
+        # deal 2nd card to players
+        for player in players:
+            player.add_card_to_first_hand(deck.remove_random_card())
+
+        # deal 2nd card to dealer
+        dealer.get_hand().add_card(deck.remove_random_card())
+        return players, dealer, deck
+
+    @staticmethod
+    def __initialize_players(players):
+        for player in players:
+            player.add_hand(Hand())
+        return players
+
+    def play(self, players):
+
+        # this method simulates each game of blackjack
 
         counter = 0
         while counter < self.total_rounds:
             counter += 1
             deck = create_deck(self.deck_count)
-            dealer = Hand()
-            player = Hand()
 
-            player, dealer, deck = self.__deal_initial_cards(player, dealer, deck)
+            dealer = Dealer()
+            players = self.__initialize_players(players)
 
-            player, deck = self.__deal_more_cards_to_player(player, dealer, deck, strategy)
+            players, dealer, deck = self.__deal_initial_cards(players, dealer, deck)
 
-            if player.is_busted():
-                score.add_to_dealer()
-            else:
-                result = self.__get_result_against_dealer(dealer, player, deck)
-                if result == ResultType.DealerWin:
-                    score.add_to_dealer()
-                elif result == ResultType.PlayerWin:
-                    score.add_to_player()
-                else:
-                    score.add_to_push()
-        return score
+            players, deck, highest_total = self.__deal_more_cards_to_players(players, dealer, deck)
+
+            dealer = self.__deal_more_cards_to_dealer(dealer, deck, highest_total)
+
+            for player in players:
+                for player_hand in player.get_hands():
+                    if player_hand.is_busted():
+                        player.get_score().add_to_losses()
+                    else:
+                        result = self.__get_result_against_dealer(dealer.get_hand(), player_hand)
+                        if result == ResultType.DealerWin:
+                            player.get_score().add_to_losses()
+                        elif result == ResultType.PlayerWin:
+                            player.get_score().add_to_wins()
+                        else:
+                            player.get_score().add_to_push()
+                player.discard_hands()
+        return players
