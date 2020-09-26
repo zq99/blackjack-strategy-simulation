@@ -11,6 +11,8 @@ def simulation():
 
     players.append(Player(StrategyType.Random))
     players.append(Player(StrategyType.BasicStrategy))
+    players.append(Player(StrategyType.BasicStrategy))
+    players.append(Player(StrategyType.BasicStrategy))
 
     players = blackjack.play(players)
     for player in players:

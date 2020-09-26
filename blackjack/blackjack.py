@@ -19,7 +19,7 @@ class Blackjack:
         self.deck_count = decks
 
     @staticmethod
-    def __get_result_against_dealer(dealer_hand, player_hand):
+    def __compare_dealer_and_player_hands(dealer_hand, player_hand):
         if dealer_hand.is_blackjack():
             if player_hand.is_blackjack():
                 return ResultType.Push
@@ -108,7 +108,7 @@ class Blackjack:
                     if player_hand.is_busted():
                         player.get_score().add_to_losses()
                     else:
-                        result = self.__get_result_against_dealer(dealer.get_hand(), player_hand)
+                        result = self.__compare_dealer_and_player_hands(dealer.get_hand(), player_hand)
                         if result == ResultType.DealerWin:
                             player.get_score().add_to_losses()
                         elif result == ResultType.PlayerWin:
