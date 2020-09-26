@@ -1,6 +1,6 @@
 import random
 from common.util import full_range
-from model.card import Suit,create_ace_card,create_royal_card,create_number_card
+from model.card import Suit, create_ace_card, create_royal_card, create_number_card
 
 
 def create_game_deck(number_of_decks=1):

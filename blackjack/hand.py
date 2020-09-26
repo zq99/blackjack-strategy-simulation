@@ -35,7 +35,7 @@ class Hand:
         else:
             return True
 
-    def add_face_down(self,card):
+    def add_face_down(self, card):
         self.hidden.append(card)
 
     def is_cards_hidden(self):
@@ -54,4 +54,5 @@ class Hand:
         return self.get_hand_total1() == 21 or self.get_hand_total2() == 21
 
     def is_busted(self):
-        return (self.get_hand_total1() > 21 and self.get_hand_total1() == self.get_hand_total2()) or self.get_hand_total2() > 21
+        return (self.get_hand_total1() > 21 and self.get_hand_total1() == self.get_hand_total2()) \
+               or self.get_hand_total2() > 21
