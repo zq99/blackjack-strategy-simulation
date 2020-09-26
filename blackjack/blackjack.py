@@ -36,7 +36,7 @@ class Blackjack:
         return ResultType.PlayerWin
 
     @staticmethod
-    def __deal_to_player(player, dealer, deck, strategy):
+    def __deal_more_cards_to_player(player, dealer, deck, strategy):
         while not player.is_busted():
             action = strategy.evaluate(player, dealer)
             if action == ActionType.Stand:
@@ -47,6 +47,17 @@ class Blackjack:
                 if player.is_blackjack():
                     break
         return player, deck
+
+    @staticmethod
+    def __deal_initial_cards(player, dealer, deck):
+        # deal cards to player
+        for n in full_range(1, 2):
+            player.add_card(deck.remove_random_card())
+
+        # deal cards to dealer
+        dealer.add_card(deck.remove_random_card())
+        dealer.add_face_down(deck.remove_random_card())
+        return player, dealer, deck
 
     def play(self, strategy_type):
         # this method simulates each game of blackjack for however many times specified by 'total_rounds'
@@ -60,15 +71,9 @@ class Blackjack:
             dealer = Hand()
             player = Hand()
 
-            # deal cards to player
-            for _ in full_range(1, 2):
-                player.add_card(deck.remove_random_card())
+            player, dealer, deck = self.__deal_initial_cards(player, dealer, deck)
 
-            # deal cards to dealer
-            dealer.add_card(deck.remove_random_card())
-            dealer.add_face_down(deck.remove_random_card())
-
-            player, deck = self.__deal_to_player(player, dealer, deck, strategy)
+            player, deck = self.__deal_more_cards_to_player(player, dealer, deck, strategy)
 
             if player.is_busted():
                 score.add_to_dealer()
