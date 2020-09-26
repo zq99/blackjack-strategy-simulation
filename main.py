@@ -1,11 +1,13 @@
 from blackjack.blackjack import Blackjack
 from blackjack.player import Player
 from blackjack.strategy import StrategyType
-
+from blackjack.rules import Rules
 
 # noinspection PyListCreation
 def simulation():
-    blackjack = Blackjack(1000, 1)
+
+    rules = Rules()
+    blackjack = Blackjack(1000, 1,rules)
 
     players = []
 

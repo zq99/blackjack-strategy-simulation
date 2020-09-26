@@ -14,17 +14,15 @@ class ResultType(enum.Enum):
 
 
 class Blackjack:
-    def __init__(self, total, decks):
+    def __init__(self, total, pack_count, rules):
         self.total_rounds = total
-        self.deck_count = decks
+        self.deck_count = pack_count
+        self.rules = rules
 
     @staticmethod
     def __compare_dealer_and_player_hands(dealer_hand, player_hand):
         if dealer_hand.is_blackjack():
-            if player_hand.is_blackjack():
-                return ResultType.Push
-            else:
-                return ResultType.DealerWin
+            return ResultType.Push if player_hand.is_blackjack() else ResultType.DealerWin
         elif dealer_hand.get_max_total() > player_hand.get_max_total():
             return ResultType.DealerWin
         return ResultType.PlayerWin
@@ -89,11 +87,9 @@ class Blackjack:
 
         # this method simulates each game of blackjack
 
-        counter = 0
-        while counter < self.total_rounds:
-            counter += 1
-            deck = create_deck(self.deck_count)
+        for counter in range(0, self.total_rounds):
 
+            deck = create_deck(self.deck_count)
             dealer = Dealer()
             players = self.__initialize_players(players)
 
