@@ -1,7 +1,7 @@
-from blackjack.blackjack import Blackjack
-from blackjack.player import Player
-from blackjack.rules import Rules
-from blackjack.strategy import StrategyType
+from simulation.blackjack import Blackjack
+from simulation.player import Player
+from simulation.rules import Rules
+from simulation.strategy import StrategyType
 
 
 # noinspection PyListCreation
@@ -10,6 +10,7 @@ def simulation():
     # playing different strategies, then prints their results out
 
     rules = Rules()
+    rules.add_used_cards_back_into_deck = False
     blackjack = Blackjack(1000, 1, rules)
 
     players = []
@@ -20,8 +21,8 @@ def simulation():
 
     players = blackjack.play(players)
 
-    for player in players:
-        print(player.get_score().to_string(), " ", player.get_strategy_name())
+    for counter, player in enumerate(players):
+        print("player_" + str(counter + 1), " ", player.get_score().to_string(), " ", player.get_strategy_name())
 
 
 def main():

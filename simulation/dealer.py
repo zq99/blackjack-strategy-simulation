@@ -1,4 +1,4 @@
-from blackjack.hand import Hand
+from simulation.hand import Hand
 
 
 class Dealer:

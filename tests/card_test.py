@@ -12,7 +12,7 @@ class DeckTestCase(unittest.TestCase):
         self.assertEqual(1, deck.get_deck_count())
 
     def split_test(self):
-        from blackjack.hand import Hand
+        from simulation.hand import Hand
         from model.card import create_ace_card, Suit
         hand = Hand()
         card1 = create_ace_card(Suit.Spade)

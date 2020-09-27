@@ -1,4 +1,4 @@
-from blackjack.score import Score
+from simulation.score import Score
 
 
 class Player:

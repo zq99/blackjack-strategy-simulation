@@ -1,6 +1,6 @@
 import enum
 
-from blackjack.common import ActionType
+from simulation.common import ActionType
 import random as rand
 
 

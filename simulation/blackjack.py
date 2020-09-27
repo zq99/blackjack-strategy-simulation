@@ -1,9 +1,9 @@
 import enum
 
-from blackjack.common import ActionType
-from blackjack.dealer import Dealer
-from blackjack.hand import Hand
-from blackjack.strategy import Strategy
+from simulation.common import ActionType
+from simulation.dealer import Dealer
+from simulation.hand import Hand
+from simulation.strategy import Strategy
 from model.deck import create_deck
 
 
@@ -45,7 +45,10 @@ class Blackjack:
     def __deal_more_cards_to_players(players, dealer, deck):
         # each player_hand gets more cards from the dealer
         # depending on what strategy they are implementing
-        highest_total = 0  # dealer needs to know the highest value hand at the table
+
+        # dealer needs to know the highest valued hand at the table
+        highest_total = 0
+
         for player in players:
             strategy = Strategy(player.strategy_type)
             for player_hand in player.get_hands():
@@ -68,7 +71,7 @@ class Blackjack:
         return players, deck, highest_total
 
     @staticmethod
-    def __deal_initial_cards(players, dealer, deck):
+    def __deal_starting_hands(players, dealer, deck):
         # dealing card order methodology:
         # https://healy.econ.ohio-state.edu/blackjack/table/dealing.html
 
@@ -76,14 +79,14 @@ class Blackjack:
         for player in players:
             player.add_card_to_first_hand(deck.remove_random_card())
 
-        # deal 1st down card to dealer_hand
+        # deal 1st down card to dealer
         dealer.get_hand().add_face_down(deck.remove_random_card())
 
         # deal 2nd card to players
         for player in players:
             player.add_card_to_first_hand(deck.remove_random_card())
 
-        # deal 2nd card to dealer_hand
+        # deal 2nd card to dealer
         dealer.get_hand().add_card(deck.remove_random_card())
         return players, dealer, deck
 
@@ -94,7 +97,7 @@ class Blackjack:
         return players
 
     def play(self, players):
-        # this method simulates each game of blackjack
+        # this method simulates each game of simulation
         # input: list of players
         # output: list of players with their results
 
@@ -104,12 +107,16 @@ class Blackjack:
             dealer = Dealer()
             players = self.__initialize_players(players)
 
-            players, dealer, deck = self.__deal_initial_cards(players, dealer, deck)
+            # everybody at the table gets their first cards
+            players, dealer, deck = self.__deal_starting_hands(players, dealer, deck)
 
+            # players each get the opportunity to ask for more cards in turn
             players, deck, highest_total = self.__deal_more_cards_to_players(players, dealer, deck)
 
+            # dealer deals themselves once everybody else has their cards
             dealer = self.__deal_more_cards_to_dealer(dealer, deck, highest_total)
 
+            # evaluate who won and loss against the dealer
             for player in players:
                 for player_hand in player.get_hands():
                     if player_hand.is_busted():
