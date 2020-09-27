@@ -20,7 +20,7 @@ class Blackjack:
         self.rules = rules
 
     @staticmethod
-    def __compare_dealer_and_player_hands(dealer_hand, player_hand):
+    def __compare_dealer_hand_to_player_hand(dealer_hand, player_hand):
         # evaluation function to determine winners and losers in the game
         if dealer_hand.is_blackjack():
             return ResultType.Push if player_hand.is_blackjack() else ResultType.DealerWin
@@ -45,7 +45,7 @@ class Blackjack:
     def __deal_more_cards_to_players(players, dealer, deck):
         # each player_hand gets more cards from the dealer
         # depending on what strategy they are implementing
-        highest_total = 0
+        highest_total = 0  # dealer needs to know the highest value hand at the table
         for player in players:
             strategy = Strategy(player.strategy_type)
             for player_hand in player.get_hands():
@@ -117,7 +117,7 @@ class Blackjack:
                     elif player_hand.get_action == ActionType.Surrender:
                         player.get_score().add_to_losses()
                     else:
-                        comparison = self.__compare_dealer_and_player_hands(dealer.get_hand(), player_hand)
+                        comparison = self.__compare_dealer_hand_to_player_hand(dealer.get_hand(), player_hand)
                         if comparison == ResultType.DealerWin:
                             player.get_score().add_to_losses()
                         elif comparison == ResultType.PlayerWin:
