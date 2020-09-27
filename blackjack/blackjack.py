@@ -43,7 +43,7 @@ class Blackjack:
 
     @staticmethod
     def __deal_more_cards_to_players(players, dealer, deck):
-        # each player_hand gets more cards from the dealer_hand
+        # each player_hand gets more cards from the dealer
         # depending on what strategy they are implementing
         highest_total = 0
         for player in players:
@@ -94,8 +94,9 @@ class Blackjack:
         return players
 
     def play(self, players):
-
         # this method simulates each game of blackjack
+        # input: list of players
+        # output: list of players with their results
 
         for n in range(0, self.total_rounds):
 
