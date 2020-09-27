@@ -32,3 +32,6 @@ class Player:
 
     def get_strategy_name(self):
         return self.strategy_type.name
+
+    def remove_hand(self, hand):
+        self.__hands.remove(hand)

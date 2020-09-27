@@ -21,6 +21,7 @@ class Blackjack:
 
     @staticmethod
     def __compare_dealer_and_player_hands(dealer_hand, player_hand):
+        # evaluation function to determine winners and losers in the game
         if dealer_hand.is_blackjack():
             return ResultType.Push if player_hand.is_blackjack() else ResultType.DealerWin
         elif dealer_hand.get_max_total() > player_hand.get_max_total():
@@ -29,6 +30,7 @@ class Blackjack:
 
     @staticmethod
     def __deal_more_cards_to_dealer(dealer, deck, highest_player_total):
+        # dealer_hand deals to him/herself until busted or until each player_hand is beaten
         while not dealer.get_hand().is_busted():
             dealer_hand = dealer.get_hand()
             card = dealer_hand.get_face_down() if dealer_hand.is_cards_hidden() else deck.remove_random_card()
@@ -41,12 +43,15 @@ class Blackjack:
 
     @staticmethod
     def __deal_more_cards_to_players(players, dealer, deck):
+        # each player_hand gets more cards from the dealer_hand
+        # depending on what strategy they are implementing
         highest_total = 0
         for player in players:
             strategy = Strategy(player.strategy_type)
             for player_hand in player.get_hands():
-                while not player_hand.is_busted():
+                while not player_hand.is_busted() and player_hand.get_action() != ActionType.Surrender:
                     action = strategy.evaluate(player_hand, dealer.get_hand())
+                    player_hand.set_action(action)
                     if action == ActionType.Stand:
                         break
                     elif action == ActionType.Hit or ActionType.Double:
@@ -54,6 +59,11 @@ class Blackjack:
                         player_hand.add_card(card)
                         if player_hand.is_blackjack():
                             break
+                    elif action == ActionType.Split:
+                        hand1, hand2 = player_hand.split_hand()
+                        player.add_hand(hand1)
+                        player.add_hand(hand2)
+                        player.remove_hand(player_hand)
                 highest_total = max(highest_total, player_hand.get_max_total())
         return players, deck, highest_total
 
@@ -66,14 +76,14 @@ class Blackjack:
         for player in players:
             player.add_card_to_first_hand(deck.remove_random_card())
 
-        # deal 1st down card to dealer
+        # deal 1st down card to dealer_hand
         dealer.get_hand().add_face_down(deck.remove_random_card())
 
         # deal 2nd card to players
         for player in players:
             player.add_card_to_first_hand(deck.remove_random_card())
 
-        # deal 2nd card to dealer
+        # deal 2nd card to dealer_hand
         dealer.get_hand().add_card(deck.remove_random_card())
         return players, dealer, deck
 
@@ -87,7 +97,7 @@ class Blackjack:
 
         # this method simulates each game of blackjack
 
-        for counter in range(0, self.total_rounds):
+        for n in range(0, self.total_rounds):
 
             deck = create_deck(self.deck_count)
             dealer = Dealer()
@@ -102,6 +112,8 @@ class Blackjack:
             for player in players:
                 for player_hand in player.get_hands():
                     if player_hand.is_busted():
+                        player.get_score().add_to_losses()
+                    elif player_hand.get_action == ActionType.Surrender:
                         player.get_score().add_to_losses()
                     else:
                         comparison = self.__compare_dealer_and_player_hands(dealer.get_hand(), player_hand)

@@ -5,5 +5,5 @@ class Rules:
     def get_replace_cards(self):
         return self.__replace_cards
 
-    def set_replace_cards(self,value):
+    def set_replace_cards(self, value):
         self.__replace_cards = value

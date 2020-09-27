@@ -17,30 +17,36 @@ class Strategy:
     def __init__(self, strategy_type=StrategyType.Random):
         self.type = strategy_type
 
-    def evaluate(self, player, dealer):
+    def evaluate(self, player_hand, dealer_hand):
         if self.type == StrategyType.BasicStrategy:
-            return self.__basic_strategy(player, dealer)
+            return self.__basic_strategy(player_hand, dealer_hand)
         else:
-            return self.__random_choice()
+            return self.__random_choice(player_hand)
 
     @staticmethod
-    def __random_choice():
-        return rand.choice(list(ActionType))
+    def __random_choice(player_hand):
+        choices = [ActionType.Hit, ActionType.Double, ActionType.Surrender, ActionType.Stand]
+        if player_hand.is_pair():
+            choices.append(ActionType.Split)
+        return rand.choice(choices)
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def __basic_strategy(player, dealer):
-        if player.is_hard():
-            if player.get_max_total() >= 17:
+    def __basic_strategy(player_hand, dealer_hand):
+
+        # THIS NEEDS TO BE COMPLETED
+
+        if player_hand.is_hard():
+            if player_hand.get_max_total() >= 17:
                 return ActionType.Stand
             else:
                 return rand.choice(list(ActionType))
-        elif player.is_soft():
-            return rand.choice(list(ActionType))
-        elif player.is_pairs():
-            return rand.choice(list(ActionType))
+        elif player_hand.is_soft():
+            return Strategy.__random_choice(player_hand)
+        elif player_hand.is_pairs():
+            return Strategy.__random_choice(player_hand)
         else:
-            return rand.choice(list(ActionType))
+            return Strategy.__random_choice(player_hand)
 
     def get_strategy(self):
         return str(self.type)

@@ -1,20 +1,25 @@
 from blackjack.blackjack import Blackjack
 from blackjack.player import Player
-from blackjack.strategy import StrategyType
 from blackjack.rules import Rules
+from blackjack.strategy import StrategyType
+
 
 # noinspection PyListCreation
 def simulation():
 
+    # creates a simulation of a game 1000 times featuring 4 players
+    # playing different strategies, then prints their results out
+
     rules = Rules()
-    blackjack = Blackjack(1000, 1,rules)
+
+    blackjack = Blackjack(1000, 1, rules)
 
     players = []
 
     players.append(Player(StrategyType.Random))
     players.append(Player(StrategyType.Random))
-    players.append(Player(StrategyType.BasicStrategy))
-    players.append(Player(StrategyType.BasicStrategy))
+    players.append(Player(StrategyType.Random))
+    players.append(Player(StrategyType.Random))
 
     players = blackjack.play(players)
     for player in players:
