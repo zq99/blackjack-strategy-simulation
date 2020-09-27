@@ -9,9 +9,7 @@ def simulation():
     # creates a simulation of a game 1000 times featuring 4 players
     # playing different strategies, then prints their results out
 
-    rules = Rules()
-    rules.add_used_cards_back_into_deck = False
-    blackjack = Blackjack(1000, 1, rules)
+    blackjack = Blackjack(1000, 1, Rules())
 
     players = []
     players.append(Player(StrategyType.Random))
