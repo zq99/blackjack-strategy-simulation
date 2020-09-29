@@ -25,10 +25,13 @@ class Strategy:
 
     @staticmethod
     def __random_choice(player_hand):
-        choices = [ActionType.Hit, ActionType.Double, ActionType.Surrender, ActionType.Stand]
-        if player_hand.is_pair():
-            choices.append(ActionType.Split)
-        return rand.choice(choices)
+        if player_hand.is_blackjack():
+            return ActionType.Stand
+        else:
+            choices = [ActionType.Hit, ActionType.Double, ActionType.Surrender, ActionType.Stand]
+            if player_hand.is_pair():
+                choices.append(ActionType.Split)
+            return rand.choice(choices)
 
     # noinspection PyUnusedLocal
     @staticmethod
@@ -40,7 +43,7 @@ class Strategy:
             if player_hand.get_max_total() >= 17:
                 return ActionType.Stand
             else:
-                return rand.choice(list(ActionType))
+                return Strategy.__random_choice(player_hand)
         elif player_hand.is_soft():
             return Strategy.__random_choice(player_hand)
         elif player_hand.is_pairs():
