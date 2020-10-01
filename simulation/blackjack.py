@@ -15,9 +15,9 @@ class ResultType(enum.Enum):
 
 class Blackjack:
     def __init__(self, total, pack_count, rules):
-        self.total_rounds = total
-        self.deck_count = pack_count
-        self.rules = rules
+        self._total_rounds = total
+        self._deck_count = pack_count
+        self._rules = rules
 
     @staticmethod
     def __compare_dealer_hand_to_player_hand(dealer_hand, player_hand):
@@ -101,9 +101,9 @@ class Blackjack:
         # input: list of players
         # output: list of players with their results
 
-        for _ in range(0, self.total_rounds):
+        for _ in range(0, self._total_rounds):
 
-            deck = create_deck(self.deck_count)
+            deck = create_deck(self._deck_count)
             dealer = Dealer()
             players = self.__initialize_players(players)
 
