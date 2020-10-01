@@ -101,7 +101,7 @@ class Blackjack:
         # input: list of players
         # output: list of players with their results
 
-        for n in range(0, self.total_rounds):
+        for _ in range(0, self.total_rounds):
 
             deck = create_deck(self.deck_count)
             dealer = Dealer()
