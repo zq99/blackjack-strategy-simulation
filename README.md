@@ -1,6 +1,6 @@
 # Blackjack Game Strategy Simulator
 
-This is an ongoing project to create a basic simulator to verify the results of applying different strategies when playing Blackjack.
+This is an ongoing project to create a basic multi-player simulator to verify the results of playing different strategies when playing Blackjack.
 
 ## Things to complete
 
