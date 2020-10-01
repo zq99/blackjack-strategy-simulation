@@ -14,7 +14,8 @@ def create_deck(number_of_decks=1):
 
 def __create_single_deck():
     deck = __Deck()
-    suits = [Suit.Diamonds, Suit.Hearts, Suit.Clubs, Suit.Spade]
+
+    suits = list(Suit)
 
     # populate the number cards for all suits (36 in total)
     for n in full_range(1, 9):
