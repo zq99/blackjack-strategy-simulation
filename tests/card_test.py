@@ -3,11 +3,12 @@ from model.deck import *
 
 
 class DeckTestCase(unittest.TestCase):
-    def test_something(self):
+    def card_deck_creation_test(self):
         self.assertEqual(True, False)
 
         deck = create_deck(1)
         self.assertEqual(52, deck.get_total_card_count())
+        deck.remove_random_card()
         self.assertEqual(51, deck.get_total_card_count())
         self.assertEqual(1, deck.get_deck_count())
 
