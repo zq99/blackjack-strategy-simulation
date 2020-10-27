@@ -5,8 +5,7 @@ This is an ongoing project to create a basic console based multi-player simulato
 
 ## Background
 
-The idea was to compare random play with basic strategy and card counting played both perfectly and imperfectly.
-
+The idea was to compare random play with basic strategy and card counting.
 
 ## Implementation
 
