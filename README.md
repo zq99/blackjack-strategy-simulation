@@ -13,10 +13,7 @@ This is an example of a simulation featuring: 2 players playing randomly, with 1
 
     blackjack = Blackjack(1000, 1, Rules())
 
-    players = []
-    players.append(Player(StrategyType.Random))
-    players.append(Player(StrategyType.Random))
-
+    players = [Player(StrategyType.Random),Player(StrategyType.Random)]
     players = blackjack.play(players)
 
     for counter, player in enumerate(players):
