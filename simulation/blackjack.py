@@ -20,7 +20,7 @@ class Blackjack:
         self._rules = rules
 
     @staticmethod
-    def __compare_dealer_hand_to_player_hand(dealer_hand, player_hand):
+    def __compare_dealer_hand_to_player_hand(dealer_hand, player_hand) -> ResultType:
         # evaluation function to determine winners and losers in the game
         if dealer_hand.is_blackjack():
             return ResultType.Push if player_hand.is_blackjack() else ResultType.DealerWin
@@ -29,7 +29,7 @@ class Blackjack:
         return ResultType.PlayerWin
 
     @staticmethod
-    def __deal_more_cards_to_dealer(dealer, deck, highest_player_total):
+    def __deal_more_cards_to_dealer(dealer, deck, highest_player_total) -> Dealer:
         # dealer_hand deals to him/herself until busted or until each player_hand is beaten
         while not dealer.get_hand().is_busted():
             dealer_hand = dealer.get_hand()
@@ -116,7 +116,7 @@ class Blackjack:
             # dealer deals themselves once everybody else has their cards
             dealer = self.__deal_more_cards_to_dealer(dealer, deck, highest_total)
 
-            # evaluate who won and loss against the dealer
+            # evaluate who has won and loss against the dealer
             for player in players:
                 for player_hand in player.get_hands():
                     if player_hand.is_busted():

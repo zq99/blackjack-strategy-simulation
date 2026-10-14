@@ -13,19 +13,6 @@ class Suit(enum.Enum):
     Hearts = 3
     Diamonds = 4
 
-
-def create_number_card(number, suit):
-    return Card(number, number, suit, CardType.Number)
-
-
-def create_ace_card(suit):
-    return Card(11, 1, suit, CardType.Ace)
-
-
-def create_royal_card(suit):
-    return Card(10, 10, suit, CardType.Royal)
-
-
 class Card:
     def __init__(self, value1, value2, suit, card_type):
         self.value1 = value1
@@ -33,5 +20,17 @@ class Card:
         self.suit = suit
         self.card_type = card_type
 
-    def to_string(self):
+    def to_string(self) -> str:
         return "value = " + str(self.value1) + " suit = " + str(self.suit) + " type = " + str(self.card_type)
+
+
+def create_number_card(number, suit) -> Card:
+    return Card(number, number, suit, CardType.Number)
+
+
+def create_ace_card(suit) -> Card:
+    return Card(11, 1, suit, CardType.Ace)
+
+
+def create_royal_card(suit) -> Card:
+    return Card(10, 10, suit, CardType.Royal)

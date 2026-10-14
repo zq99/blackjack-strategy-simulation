@@ -13,7 +13,7 @@ class Player:
     def add_hand(self, hand):
         self.__hands.append(hand)
 
-    def get_hand_count(self):
+    def get_hand_count(self) -> int:
         return len(self.__hands)
 
     def add_card_hand(self, card, index):

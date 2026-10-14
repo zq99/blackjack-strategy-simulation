@@ -51,5 +51,5 @@ class Strategy:
         else:
             return Strategy.__random_choice(player_hand)
 
-    def get_strategy(self):
+    def get_strategy(self) -> str:
         return str(self.type)

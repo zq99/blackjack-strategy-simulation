@@ -1,9 +1,64 @@
 import random
 from common.util import full_range
-from model.card import Suit, create_ace_card, create_royal_card, create_number_card
+from model.card import (
+    Suit, create_ace_card, create_royal_card, create_number_card, Card
+)
+
+class __Deck:
+    def __init__(self):
+        self.cards = []
+
+    def add_card(self, card) -> Card | None:
+        self.cards.append(card)
+
+    def is_populated(self) -> bool:
+        return len(self.cards) > 0
+
+    def remove_random_card(self) -> Card | None:
+
+        if not self.is_populated():
+            return None
+        card = random.choice(self.cards)
+        self.cards.remove(card)
+        return card
+
+    def get_card_count(self) -> int:
+        return len(self.cards)
 
 
-def create_deck(number_of_decks=1):
+class GameDeck:
+    def __init__(self):
+        self.decks = []
+
+    def add_deck(self, card):
+        self.decks.append(card)
+
+    def is_populated(self):
+        return len(self.decks) > 0
+
+    def remove_random_card(self) -> Card | None:
+
+        if not self.is_populated():
+            return None
+
+        # choose random deck
+        i = random.randrange(len(self.decks))
+        deck = self.decks[i]
+        # choose random card
+        card = deck.remove_random_card()
+        self.decks[i] = deck
+        return card
+
+    def get_deck_count(self) -> int:
+        return len(self.decks)
+
+    def get_total_card_count(self) -> int:
+        total = 0
+        for d in self.decks:
+            total += d.get_card_count()
+        return total
+
+def create_deck(number_of_decks=1) -> GameDeck:
     # this is main method for creation
     game_deck = GameDeck()
     for _ in full_range(1, number_of_decks):
@@ -12,7 +67,7 @@ def create_deck(number_of_decks=1):
     return game_deck
 
 
-def __create_single_deck():
+def __create_single_deck() -> __Deck:
     deck = __Deck()
 
     suits = list(Suit)
@@ -35,53 +90,3 @@ def __create_single_deck():
         deck.add_card(card)
 
     return deck
-
-
-class __Deck:
-    def __init__(self):
-        self.cards = []
-
-    def add_card(self, card):
-        self.cards.append(card)
-
-    def is_populated(self):
-        return len(self.cards) > 0
-
-    def remove_random_card(self):
-        if self.is_populated():
-            card = random.choice(self.cards)
-            self.cards.remove(card)
-            return card
-
-    def get_card_count(self):
-        return len(self.cards)
-
-
-class GameDeck:
-    def __init__(self):
-        self.decks = []
-
-    def add_deck(self, card):
-        self.decks.append(card)
-
-    def is_populated(self):
-        return len(self.decks) > 0
-
-    def remove_random_card(self):
-        if self.is_populated():
-            # choose random deck
-            i = random.randrange(len(self.decks))
-            deck = self.decks[i]
-            # choose random card
-            card = deck.remove_random_card()
-            self.decks[i] = deck
-            return card
-
-    def get_deck_count(self):
-        return len(self.decks)
-
-    def get_total_card_count(self):
-        total = 0
-        for d in self.decks:
-            total += d.get_card_count()
-        return total
